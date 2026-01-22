@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iAction - Giải Pháp Chuyển Đổi Số Tinh Gọn</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Library (Animation On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts: Montserrat (Bold/Powerful feel) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Config Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brandDark: '#050505', // Deep Black
+                        brandCard: '#121212', // Slightly lighter black
+                        brandRed: '#DC2626', // Red 600
+                        brandOrange: '#EA580C', // Orange 600
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #DC2626; 
+        }
+
+        /* Gradient Text Helper - Red/Orange Fire Theme */
+        .text-gradient {
+            background: linear-gradient(to right, #F87171, #DC2626, #B91C1C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Gradient Border Helper - Red Neon */
+        .gradient-border {
+            position: relative;
+            background: #121212;
+            border-radius: 1rem;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        /* Neon Glow on Hover */
+        .gradient-border:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(220, 38, 38, 0.3);
+        }
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            border-radius: 1.05rem;
+            background: linear-gradient(135deg, #7f1d1d, #1a1a1a);
+            transition: opacity 0.3s ease;
+        }
+        .gradient-border:hover::before {
+            background: linear-gradient(135deg, #DC2626, #F97316);
+        }
+
+        /* Blob Background Animation */
+        .blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(60px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: moveBlob 15s infinite alternate;
+        }
+        @keyframes moveBlob {
+            0% { transform: translate(-10%, -10%) scale(1); opacity: 0.4; }
+            100% { transform: translate(10%, 10%) scale(1.1); opacity: 0.6; }
+        }
+
+        /* Red Button Glow */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+    </style>
+</head>
+<body class="bg-brandDark text-slate-200 overflow-x-hidden selection:bg-brandRed selection:text-white">
+
+    <!-- Navbar Sticky Glassmorphism -->
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/10 bg-brandDark/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between mx-auto p-4">
+                <a href="#" class="flex items-center space-x-1 group">
+                    <div class="w-8 h-8 bg-brandRed rounded flex items-center justify-center text-white font-bold text-xl mr-2 group-hover:bg-red-500 transition">i</div>
+                    <span class="self-center text-2xl font-black whitespace-nowrap text-white tracking-tighter">ACTION<span class="text-brandRed">.</span></span>
+                </a>
+                <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                    <a href="#contact" class="btn-glow text-white bg-brandRed hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-900 font-bold rounded-lg text-sm px-6 py-3 text-center shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all uppercase tracking-wide">
+                        Đăng Ký Tư Vấn
+                    </a>
+                </div>
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                    <ul class="flex flex-col p-4 md:p-0 mt-4 font-bold border border-gray-800 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+                        <li><a href="#problem" class="block py-2 px-3 text-gray-400 hover:text-white hover:text-brandRed transition uppercase text-xs tracking-wider">Thực Trạng</a></li>
+                        <li><a href="#solution" class="block py-2 px-3 text-gray-400 hover:text-white hover:text-brandRed transition uppercase text-xs tracking-wider">Giải Pháp</a></li>
+                        <li><a href="#pricing" class="block py-2 px-3 text-gray-400 hover:text-white hover:text-brandRed transition uppercase text-xs tracking-wider">Bảng Giá</a></li>
+                        <li><a href="#about" class="block py-2 px-3 text-gray-400 hover:text-white hover:text-brandRed transition uppercase text-xs tracking-wider">Chuyên Gia</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-4 overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="blob top-0 left-0"></div>
+        <div class="blob bottom-0 right-0 bg-orange-900/30"></div>
+
+        <!-- Grid Pattern Overlay -->
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-0"></div>
+
+        <div class="max-w-7xl mx-auto text-center z-10 relative">
+            <div class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-brandRed text-xs font-bold mb-8 uppercase tracking-widest animate-pulse-slow" data-aos="fade-down">
+                <i class="fa-solid fa-bolt mr-2"></i> Giải pháp Chuyển đổi số Tinh Gọn
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight tracking-tight" data-aos="fade-up" data-aos-delay="100">
+                GIÚP SẾP <span class="text-gradient">TINH GỌN</span><br>
+                BIẾN DOANH NGHIỆP THÀNH<br>
+                <span class="text-white relative inline-block">
+                    CỖ MÁY TỰ ĐỘNG
+                    <svg class="absolute w-full h-3 -bottom-1 left-0 text-brandRed" viewBox="0 0 100 10" preserveAspectRatio="none">
+                        <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none" />
+                    </svg>
+                </span>
+            </h1>
+
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-10 font-medium" data-aos="fade-up" data-aos-delay="200">
+                Không cần phần mềm tiền tỷ. Không thuê IT nghìn đô.<br class="hidden md:block">
+                <span class="text-white">Sở hữu trọn đời</span> - <span class="text-brandRed font-bold">KHÔNG</span> tốn phí thuê bao.
+            </p>
+
+            <!-- Benefits Grid -->
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12 text-left md:text-center" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-white/5 p-5 rounded-xl backdrop-blur-sm border border-white/10 hover:border-brandRed/50 transition duration-300">
+                    <i class="fa-solid fa-scissors text-brandRed mr-2 text-xl"></i> 
+                    <span class="font-bold text-white">Cắt giảm 30-50%</span> chi phí lãng phí
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl backdrop-blur-sm border border-white/10 hover:border-brandRed/50 transition duration-300">
+                    <i class="fa-solid fa-robot text-brandRed mr-2 text-xl"></i> 
+                    <span class="font-bold text-white">Nhân suất X10</span> nhờ AI
+                </div>
+                <div class="bg-white/5 p-5 rounded-xl backdrop-blur-sm border border-white/10 hover:border-brandRed/50 transition duration-300">
+                    <i class="fa-solid fa-money-bill-trend-up text-brandRed mr-2 text-xl"></i> 
+                    <span class="font-bold text-white">Quy trình Sale</span> tự động 24/7
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-5" data-aos="fade-up" data-aos-delay="400">
+                <a href="#contact" class="px-10 py-4 bg-brandRed text-white font-extrabold rounded-full hover:scale-105 transition transform shadow-[0_0_30px_rgba(220,38,38,0.5)] uppercase tracking-wide border-2 border-transparent">
+                    Đăng Ký "Bắt Mạch" Ngay
+                </a>
+                <a href="#solution" class="px-10 py-4 border-2 border-gray-700 text-white font-bold rounded-full hover:bg-white hover:text-black hover:border-white transition uppercase tracking-wide">
+                    Xem Giải Pháp
+                </a>
+            </div>
+            <p class="mt-6 text-xs text-gray-500 font-bold uppercase tracking-widest opacity-60">(Dành cho Chủ doanh nghiệp quyết liệt đổi mới)</p>
+        </div>
+    </section>
+
+    <!-- PAIN POINTS (Thực Trạng) -->
+    <section id="problem" class="py-24 bg-black relative">
+        <!-- Decoration Line -->
+        <div class="absolute left-1/2 top-0 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-brandRed to-transparent opacity-50"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-3xl md:text-5xl font-black mb-6 uppercase">Có phải công ty càng lớn,<br> <span class="text-brandRed">Sếp càng khổ?</span></h2>
+                <p class="text-gray-400 text-lg">Đối thủ dùng AI chạy ầm ầm, mình thì loay hoay với những "cục nợ" này:</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="gradient-border group p-8 h-full bg-brandCard" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-red-900/20 border border-red-900/30 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brandRed group-hover:rotate-6 transition-all duration-300">
+                        <i class="fa-solid fa-droplet-slash text-brandRed text-3xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">1. Rò Rỉ "Máu"</h3>
+                    <ul class="space-y-4 text-gray-400 text-sm font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-brandRed mt-1 mr-3 text-lg"></i> Trả lương 10tr chỉ để nhân viên nhập liệu copy-paste.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-brandRed mt-1 mr-3 text-lg"></i> Tiền quảng cáo như muối bỏ bể, Lead về không chăm kịp.</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="gradient-border group p-8 h-full bg-brandCard" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-orange-900/20 border border-orange-900/30 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brandOrange group-hover:rotate-6 transition-all duration-300">
+                        <i class="fa-solid fa-person-walking-luggage text-brandOrange text-3xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">2. Bộ Máy "Cơm"</h3>
+                    <ul class="space-y-4 text-gray-400 text-sm font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-brandOrange mt-1 mr-3 text-lg"></i> Sếp là khổ chủ, việc gì cũng đến tay, quản lý vi mô.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-brandOrange mt-1 mr-3 text-lg"></i> Quy trình rườm rà, nhân viên làm việc theo cảm tính.</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="gradient-border group p-8 h-full bg-brandCard" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-yellow-900/20 border border-yellow-900/30 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-yellow-600 group-hover:rotate-6 transition-all duration-300">
+                        <i class="fa-solid fa-sack-dollar text-yellow-600 text-3xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">3. Tiền Rơi Cửa Sổ</h3>
+                    <ul class="space-y-4 text-gray-400 text-sm font-medium">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-yellow-600 mt-1 mr-3 text-lg"></i> Khách nhắn 9h tối không ai rep -> Mất khách sang đối thủ.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-yellow-600 mt-1 mr-3 text-lg"></i> Data khách cũ vứt xó, không khai thác lại được.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION (Giải Pháp) -->
+    <section id="solution" class="py-24 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 max-w-4xl mx-auto" data-aos="fade-up">
+                <h2 class="text-3xl md:text-5xl font-black mb-6">HỆ SINH THÁI <span class="text-gradient">3 CHÂN KIỀNG</span></h2>
+                <p class="text-gray-300 text-lg font-medium">
+                    Tôi không bán phần mềm. Tôi là <span class="text-white border-b-2 border-brandRed">ĐỐI TÁC KỸ THUẬT</span> giúp bạn gỡ rối.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10 text-center">
+                <!-- Sol 1 -->
+                <div class="p-10 rounded-3xl bg-brandCard border border-white/5 hover:border-brandRed/50 hover:-translate-y-3 transition duration-500 group" data-aos="zoom-in">
+                    <div class="w-24 h-24 mx-auto bg-black rounded-full border-2 border-gray-800 flex items-center justify-center mb-8 group-hover:border-brandRed group-hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] transition-all">
+                        <i class="fa-solid fa-brain text-4xl text-gray-300 group-hover:text-brandRed transition-colors"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 text-white uppercase">1. Tư Vấn & Đào Tạo</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        "Quét rác" quy trình thừa. Đào tạo tư duy sử dụng AI. Biến nhân viên bình thường thành "chiến binh" đa năng.
+                    </p>
+                </div>
+
+                <!-- Sol 2 -->
+                <div class="p-10 rounded-3xl bg-brandCard border border-white/5 hover:border-brandRed/50 hover:-translate-y-3 transition duration-500 group" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="w-24 h-24 mx-auto bg-black rounded-full border-2 border-gray-800 flex items-center justify-center mb-8 group-hover:border-brandRed group-hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] transition-all">
+                        <i class="fa-solid fa-network-wired text-4xl text-gray-300 group-hover:text-brandRed transition-colors"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 text-white uppercase">2. Hệ Thống May Đo</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Không dùng phần mềm cồng kềnh. Xây trực tiếp trên Google Sheet, Drive, Zalo. Tự động hóa 100% việc lặp lại.
+                    </p>
+                </div>
+
+                <!-- Sol 3 -->
+                <div class="p-10 rounded-3xl bg-brandCard border border-white/5 hover:border-brandRed/50 hover:-translate-y-3 transition duration-500 group" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="w-24 h-24 mx-auto bg-black rounded-full border-2 border-gray-800 flex items-center justify-center mb-8 group-hover:border-brandRed group-hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] transition-all">
+                        <i class="fa-solid fa-users-gear text-4xl text-gray-300 group-hover:text-brandRed transition-colors"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 text-white uppercase">3. Nhân Sự Kỹ Thuật</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Hỗ trợ phỏng vấn tuyển dụng IT/Marketing đúng người hoặc cung cấp team Outsource thực chiến làm ngay.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU MODULES -->
+    <section class="py-24 bg-black relative overflow-hidden">
+        <!-- Background decorative text -->
+        <div class="absolute top-10 left-0 text-[200px] font-black text-white/5 -z-0 select-none whitespace-nowrap">MODULES</div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h2 class="text-3xl md:text-5xl font-black text-center mb-16 uppercase" data-aos="fade-up">Thực Đơn <span class="text-brandRed">Giải Pháp</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Module 1 -->
+                <div class="bg-brandCard p-8 rounded-2xl border border-white/10 hover:border-brandRed transition duration-300" data-aos="fade-right">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <span class="w-10 h-10 bg-brandRed rounded flex items-center justify-center mr-3 text-sm"><i class="fa-solid fa-rocket"></i></span>
+                        Tăng Doanh Thu
+                    </h3>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Máy sản xuất Content AI (FB, Tiktok).</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Phễu hút khách tự động (0đ quảng cáo).</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Trợ lý Sale ảo: Chia số, nhắc lịch.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> CSKH tự động (Zalo/Email).</li>
+                    </ul>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="bg-brandCard p-8 rounded-2xl border border-white/10 hover:border-brandRed transition duration-300 transform md:-translate-y-4 shadow-xl shadow-red-900/10" data-aos="fade-up">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <span class="w-10 h-10 bg-white text-black rounded flex items-center justify-center mr-3 text-sm"><i class="fa-solid fa-gears"></i></span>
+                        Tối Ưu Vận Hành
+                    </h3>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-white mt-1 mr-2"></i> Kế toán máy: Chấm công, lương chuẩn 100%.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-white mt-1 mr-2"></i> Theo dõi dòng tiền Realtime.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-white mt-1 mr-2"></i> Báo cáo tự động về đt Sếp mỗi sáng.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-white mt-1 mr-2"></i> Quản lý kho, đơn hàng không sai lệch.</li>
+                    </ul>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="bg-brandCard p-8 rounded-2xl border border-white/10 hover:border-brandRed transition duration-300" data-aos="fade-left">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <span class="w-10 h-10 bg-brandRed rounded flex items-center justify-center mr-3 text-sm"><i class="fa-solid fa-expand"></i></span>
+                        Mở Rộng (Scale)
+                    </h3>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Trường học nội bộ (LMS) tự động đào tạo.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Web/App riêng tích điểm, đặt hàng.</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-brandRed mt-1 mr-2"></i> Hệ thống Affiliate, CTV tự động.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING (Bảng Giá) -->
+    <section id="pricing" class="py-24 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="blob top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900 opacity-20 w-[800px] h-[800px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-brandRed font-bold tracking-[0.2em] uppercase text-sm">Đầu tư thông minh</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-3 text-white">"BỆNH ĐẾN ĐÂU - KÊ ĐƠN ĐẾN ĐÓ"</h2>
+            </div>
+
+            <!-- MODE 1: DONE WITH YOU -->
+            <div class="mb-20">
+                <h3 class="text-2xl font-bold text-white mb-10 border-l-4 border-brandRed pl-6 uppercase">A. Hình thức 1: Done With You (Cầm tay chỉ việc)</h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <!-- Package 1 -->
+                    <div class="bg-brandCard rounded-2xl p-6 border border-white/5 hover:border-brandRed transition duration-300 flex flex-col group" data-aos="flip-left">
+                        <div class="mb-4">
+                            <span class="bg-white/10 text-white text-xs px-3 py-1 rounded font-bold uppercase">3 Tháng</span>
+                        </div>
+                        <h4 class="text-xl font-black text-white mb-2">GỠ RỐI</h4>
+                        <div class="text-3xl font-black text-brandRed mb-6">40 Triệu</div>
+                        <p class="text-gray-400 text-xs font-medium flex-grow mb-6">Dành cho DN đang rối ren, cần xử lý gấp 1 vấn đề lớn (Sales hoặc Nhân sự).</p>
+                        <a href="#contact" class="mt-auto block w-full py-3 rounded-lg border border-white/20 text-white hover:bg-white hover:text-black hover:border-white text-center transition font-bold uppercase text-sm">Chọn Gói</a>
+                    </div>
+
+                    <!-- Package 2 -->
+                    <div class="bg-gradient-to-b from-red-900/50 to-brandCard rounded-2xl p-6 border border-brandRed/50 transform md:-translate-y-4 shadow-xl shadow-red-900/20 flex flex-col relative group" data-aos="flip-left" data-aos-delay="100">
+                        <div class="absolute top-0 right-0 bg-brandRed text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg uppercase tracking-wide">Best Choice</div>
+                        <div class="mb-4">
+                            <span class="bg-brandRed text-white text-xs px-3 py-1 rounded font-bold uppercase">6 Tháng</span>
+                        </div>
+                        <h4 class="text-xl font-black text-white mb-2">TĂNG TỐC</h4>
+                        <div class="text-3xl font-black text-white mb-6">70 Triệu</div>
+                        <p class="text-gray-300 text-xs font-medium flex-grow mb-6">Chuyển đổi số toàn bộ các phòng ban. Xây dựng team Digital chuyên nghiệp từ A-Z.</p>
+                        <a href="#contact" class="mt-auto block w-full py-3 rounded-lg bg-brandRed text-white hover:bg-red-700 text-center transition font-bold uppercase text-sm shadow-lg shadow-red-900/50">Chọn Gói</a>
+                    </div>
+
+                    <!-- Package 3 -->
+                    <div class="bg-brandCard rounded-2xl p-6 border border-white/5 hover:border-brandRed transition duration-300 flex flex-col group" data-aos="flip-left" data-aos-delay="200">
+                        <div class="mb-4">
+                            <span class="bg-white/10 text-white text-xs px-3 py-1 rounded font-bold uppercase">9 Tháng</span>
+                        </div>
+                        <h4 class="text-xl font-black text-white mb-2">TOÀN DIỆN</h4>
+                        <div class="text-3xl font-black text-white mb-6">100 Triệu</div>
+                        <p class="text-gray-400 text-xs font-medium flex-grow mb-6">Hệ thống hóa toàn diện. Xây dựng phần mềm riêng (App/Web) để phát triển bền vững.</p>
+                        <a href="#contact" class="mt-auto block w-full py-3 rounded-lg border border-white/20 text-white hover:bg-white hover:text-black hover:border-white text-center transition font-bold uppercase text-sm">Chọn Gói</a>
+                    </div>
+
+                    <!-- Package 4 -->
+                    <div class="bg-brandCard rounded-2xl p-6 border border-white/5 hover:border-brandRed transition duration-300 flex flex-col group" data-aos="flip-left" data-aos-delay="300">
+                        <div class="mb-4">
+                            <span class="bg-white/10 text-white text-xs px-3 py-1 rounded font-bold uppercase">1 Năm</span>
+                        </div>
+                        <h4 class="text-xl font-black text-white mb-2">PARTNER</h4>
+                        <div class="text-3xl font-black text-white mb-6">120 Triệu</div>
+                        <p class="text-gray-400 text-xs font-medium flex-grow mb-6">CTO thuê ngoài. Bảo trì hệ thống, cập nhật công nghệ mới nhất, tư vấn chiến lược dài hạn.</p>
+                        <a href="#contact" class="mt-auto block w-full py-3 rounded-lg border border-white/20 text-white hover:bg-white hover:text-black hover:border-white text-center transition font-bold uppercase text-sm">Chọn Gói</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODE 2: DONE FOR YOU -->
+            <div class="bg-[#1a1a1a] rounded-3xl p-10 border border-white/10 relative overflow-hidden hover:border-brandRed/30 transition-all" data-aos="fade-up">
+                <div class="md:flex items-center justify-between z-10 relative">
+                    <div class="md:w-2/3">
+                        <h3 class="text-2xl font-bold text-white mb-4 border-l-4 border-white pl-6 uppercase">B. Hình thức 2: Done For You (Trọn gói)</h3>
+                        <p class="text-gray-300 mb-6 font-medium">Dành cho Sếp bận rộn, muốn có kết quả ngay, không cần mày mò học hỏi.</p>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div class="bg-black/50 p-4 rounded-lg border border-white/5">
+                                <i class="fa-solid fa-user-plus text-brandRed mb-2 block text-xl"></i>
+                                <span class="font-bold text-white text-sm">Tuyển dụng</span>
+                                <p class="text-xs text-gray-500 mt-1">Tìm nhân sự Digital chuẩn</p>
+                            </div>
+                            <div class="bg-black/50 p-4 rounded-lg border border-white/5">
+                                <i class="fa-solid fa-code text-brandRed mb-2 block text-xl"></i>
+                                <span class="font-bold text-white text-sm">Thi công</span>
+                                <p class="text-xs text-gray-500 mt-1">Setup hệ thống A-Z</p>
+                            </div>
+                            <div class="bg-black/50 p-4 rounded-lg border border-white/5">
+                                <i class="fa-solid fa-handshake text-brandRed mb-2 block text-xl"></i>
+                                <span class="font-bold text-white text-sm">Chuyển giao</span>
+                                <p class="text-xs text-gray-500 mt-1">Đào tạo & Bàn giao</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/3 mt-8 md:mt-0 text-center pl-8 border-l border-white/10">
+                        <p class="text-gray-400 text-sm mb-4 font-bold uppercase tracking-wider">Chi phí tùy quy mô</p>
+                        <a href="#contact" class="inline-block w-full px-8 py-4 bg-white text-black font-black rounded-lg hover:bg-brandRed hover:text-white transition uppercase tracking-wide">
+                            Liên hệ báo giá
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS (Quy Trình) -->
+    <section class="py-24 bg-black">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-5xl font-black text-center mb-16 uppercase">Quy trình <span class="text-brandRed">Thực Chiến</span></h2>
+            
+            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-700 before:to-transparent">
+                <!-- Step 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active" data-aos="fade-up">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full border-4 border-black bg-brandCard text-gray-500 group-[.is-active]:bg-brandRed group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-black text-xl z-10">
+                        1
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl bg-brandCard border border-white/10 shadow hover:border-brandRed/50 transition">
+                        <h3 class="font-bold text-white text-lg mb-2 uppercase">Bắt Mạch (Miễn phí)</h3>
+                        <p class="text-gray-400 text-sm">Cafe hoặc Zoom. Bạn chia sẻ nỗi đau, tôi lắng nghe và audit quy trình hiện tại.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full border-4 border-black bg-brandCard text-gray-500 group-[.is-active]:bg-white group-[.is-active]:text-black shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-black text-xl z-10">
+                        2
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl bg-brandCard border border-white/10 shadow hover:border-white/50 transition">
+                        <h3 class="font-bold text-white text-lg mb-2 uppercase">Kê Đơn (Proposal)</h3>
+                        <p class="text-gray-400 text-sm">Tư vấn gói giải pháp phù hợp ngân sách. Chốt phương án tối ưu và tiết kiệm nhất.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full border-4 border-black bg-brandCard text-gray-500 group-[.is-active]:bg-brandRed group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-black text-xl z-10">
+                        3
+                    </div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl bg-brandCard border border-white/10 shadow hover:border-brandRed/50 transition">
+                        <h3 class="font-bold text-white text-lg mb-2 uppercase">Điều Trị (Triển khai)</h3>
+                        <p class="text-gray-400 text-sm">Bắt tay làm việc. Cam kết ra kết quả (tiết kiệm giờ làm, tăng số lượng khách).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT EXPERT (Chuyên Gia) -->
+    <section id="about" class="py-24 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brandCard rounded-3xl p-8 md:p-12 border border-white/5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brandRed rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+                
+                <div class="flex flex-col md:flex-row items-center gap-12 relative z-10">
+                    <div class="md:w-1/3" data-aos="fade-right">
+                        <!-- Image with border effect -->
+                        <div class="relative group">
+                            <div class="absolute -inset-2 bg-gradient-to-br from-brandRed to-black rounded-2xl opacity-70 group-hover:opacity-100 transition duration-500 blur-sm"></div>
+                            <img src="https://placehold.co/400x500/111111/dddddd?text=Thiet+Giap" alt="Thiết Giáp" class="relative rounded-xl shadow-2xl w-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                        </div>
+                    </div>
+                    <div class="md:w-2/3" data-aos="fade-left">
+                        <h2 class="text-3xl md:text-5xl font-black mb-4 uppercase">Tôi là <span class="text-brandRed">Thiết Giáp</span></h2>
+                        <p class="text-white font-bold mb-6 text-xl tracking-wide uppercase">Kinh Doanh thực chiến & Công Nghệ</p>
+                        <div class="space-y-6 text-gray-400 font-medium leading-relaxed">
+                            <p>5 năm chinh chiến đa lĩnh vực: Homestay, Trung Tâm Tiếng Anh, Phần mềm. Tôi hiểu rõ cảm giác "xót tiền" khi trả lương mà bộ máy vận hành ì ạch.</p>
+                            <p>Từ con số 0, tôi đã xây dựng các phòng ban tự vận hành, tối ưu quy trình giúp nhân sự ít nhưng năng suất X10. Tôi không nói lý thuyết suông, tôi làm thật.</p>
+                            <blockquote class="border-l-4 border-brandRed pl-6 italic text-white text-xl mt-8 font-serif">
+                                "Đừng thuê tôi chỉ để viết code. Hãy thuê tôi để xây dựng cỗ máy in tiền tự động cho doanh nghiệp của bạn."
+                            </blockquote>
+                        </div>
+                        <div class="mt-8 flex gap-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brandRed hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brandRed hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brandRed hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT CTA (Form) -->
+    <section id="contact" class="py-24 bg-black relative">
+        <!-- Background Grid -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="text-3xl md:text-5xl font-black mb-6 text-white uppercase">Thời điểm tốt nhất để số hóa là 5 năm trước.<br>Thời điểm tốt thứ hai là <span class="text-brandRed">NGAY BÂY GIỜ</span>.</h2>
+            <p class="text-gray-400 mb-12 text-lg">Đừng để công ty ì ạch mãi trong khi đối thủ đã chạy rất xa.</p>
+            
+            <div class="bg-[#0f0f0f] p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl text-left backdrop-blur-xl" data-aos="zoom-in">
+                <h3 class="text-2xl font-black text-white mb-8 text-center uppercase tracking-wide">Đặt lịch tư vấn 1:1 ngay</h3>
+                <form class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-500 text-xs font-bold mb-2 uppercase tracking-wider">Họ tên</label>
+                            <input type="text" class="w-full bg-black border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-brandRed focus:ring-1 focus:ring-brandRed transition font-medium" placeholder="Nhập họ tên...">
+                        </div>
+                        <div>
+                            <label class="block text-gray-500 text-xs font-bold mb-2 uppercase tracking-wider">Số điện thoại</label>
+                            <input type="text" class="w-full bg-black border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-brandRed focus:ring-1 focus:ring-brandRed transition font-medium" placeholder="Nhập SĐT...">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-500 text-xs font-bold mb-2 uppercase tracking-wider">Email</label>
+                        <input type="email" class="w-full bg-black border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-brandRed focus:ring-1 focus:ring-brandRed transition font-medium" placeholder="Nhập Email...">
+                    </div>
+                    <div>
+                        <label class="block text-gray-500 text-xs font-bold mb-2 uppercase tracking-wider">Lĩnh vực đang làm</label>
+                        <input type="text" class="w-full bg-black border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-brandRed focus:ring-1 focus:ring-brandRed transition font-medium" placeholder="VD: Bất động sản, Spa...">
+                    </div>
+                    <div>
+                        <label class="block text-gray-500 text-xs font-bold mb-2 uppercase tracking-wider">Vấn đề đau đầu nhất</label>
+                        <textarea rows="3" class="w-full bg-black border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-brandRed focus:ring-1 focus:ring-brandRed transition font-medium" placeholder="Hãy kể ngắn gọn nỗi đau của bạn..."></textarea>
+                    </div>
+                    <button type="button" class="w-full py-4 bg-brandRed rounded-lg text-white font-black text-xl hover:bg-red-700 transition transform hover:-translate-y-1 shadow-[0_10px_20px_rgba(220,38,38,0.3)] uppercase tracking-wide">
+                        Gửi Đăng Ký
+                    </button>
+                </form>
+                <div class="mt-10 text-center border-t border-white/10 pt-8">
+                    <p class="text-white font-bold text-lg hover:text-brandRed transition cursor-pointer"><i class="fa-solid fa-phone mr-2"></i> Hotline: 0362.675.331</p>
+                    <p class="text-gray-500 mt-2 text-sm uppercase tracking-wider"><i class="fa-solid fa-globe mr-2"></i> Website: iaction.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-10 border-t border-white/10 text-center text-gray-600 text-xs font-bold uppercase tracking-widest">
+        <p>&copy; 2024 iAction Solutions. All rights reserved.</p>
+        <p class="mt-2">Design by Thiet Giap</p>
+    </footer>
+
+    <!-- Init AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+        });
+    </script>
+</body>
+</html>
